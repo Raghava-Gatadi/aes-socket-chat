@@ -1,29 +1,39 @@
-## [Project : AES Encryption and Decryption in Socket Programming](Cryptography)
+# AES Socket Chat Demo
 
-### Overview
+A Python learning project that combines a handwritten AES implementation with a two-way TCP socket chat. The client and server encrypt messages using a shared key and print the received ciphertext and decrypted text.
 
-This project establishes a secure connection between a client and a server (MacBook and Windows) using socket programming. The messages exchanged between the client and server are encrypted using the AES (Advanced Encryption Standard) algorithm. The AES function implemented in the code is capable of utilizing 128-, 192-, and 256-bit keys for encryption and decryption.
+## Repository map
 
-### Key Features
+| File | Purpose |
+| --- | --- |
+| [AES.py](AES.py) | AES encryption/decryption implementation |
+| [server.py](server.py) | TCP listener and interactive sender/receiver |
+| [client.py](client.py) | Connects to the server and exchanges messages |
 
-- **Dynamic Key Management:** Instead of using a fixed key for every session, the code allows users to include a key in their messages. The key is added using the delimiter `\~`. If multiple delimiters are found in the message, the last one is used as the key. If no delimiter is found, the previous key is used.
+## Local lab setup
 
-### Instructions
+Requires Python 3 and `colorama`. Use an isolated environment:
 
-1. Clone the folder in to your desktop.
-2. Compile and run the server code on one machine.
-3. Compile and run the client code on another machine.
-4. Communicate securely with encrypted messages.
-
-### Example
-
-```python
-# Example Message
-message = "Hello, World!\~my_secret_key"
-
-# Encrypted Message Sent Over the Network
-# ...
-
-# Decryption at the Receiver's End
-# ...
+```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install colorama
 ```
+
+Before starting, edit the address in `client.py` to match your lab server. The scripts use port `12345`; the server currently binds all interfaces. Keep the listener on a trusted lab network, or change its bind address to loopback when testing on one computer.
+
+Run the server in one terminal and the client in another:
+
+```sh
+python3 server.py
+# In the other terminal:
+python3 client.py
+```
+
+Both sides start with the same demonstration key. A message ending in `\~new_key` changes the key used for subsequent messages; the last delimiter is used. This is application behavior, not an authenticated key-exchange protocol.
+
+## Scope and limitations
+
+This is an educational demonstration, not a secure messaging product. The default key is public, there is no peer authentication, and the socket framing and custom cryptography need independent review. Runtime compatibility and cryptographic correctness were not revalidated during this documentation update.
+
+The original collection is preserved in [cybersecurity](https://github.com/Raghava-Gatadi/cybersecurity).
